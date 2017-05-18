@@ -113,6 +113,12 @@ module.exports.errorLogger = function (opts) {
                 (req.socket.socket && req.socket.socket.remoteAddress) ||
                 '127.0.0.1';
 
+            var body = typeof req.body === 'object'
+              ? Array.isArray(req.body)
+                ? req.body.slice()
+                : Object.assign({}, req.body)
+              : req.body
+
             var meta = {
                 'remote-address': ip,
                 'ip': ip,
@@ -120,7 +126,7 @@ module.exports.errorLogger = function (opts) {
                 'url': url,
                 'referer': referer,
                 'user-agent': ua,
-                'body': req.body,
+                'body': body,
                 'short-body': undefined,
                 'http-version': httpVersion,
                 'response-time': responseTime,
